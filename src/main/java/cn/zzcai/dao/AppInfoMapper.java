@@ -38,4 +38,6 @@ public interface AppInfoMapper {
 	AppInfo findAppinfo(@Param("id")Integer id,@Param("APKName")String APKName);
 
 	int addAppInfo(AppInfo appInfo);
+
+	int updateAppInfo(AppInfo appInfo);
 }

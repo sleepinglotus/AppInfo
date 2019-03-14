@@ -184,9 +184,8 @@ public class AppInfoController {
     public String showAppVersionAdd(@RequestParam("id")Integer appId,Model model){
         List<AppVersion> appVersionList=appVersionService.findAppVersionList(appId);
         model.addAttribute("appVersionList",appVersionList);
-        AppInfo appInfo=appInfoService.findAppinfo(appId);
-        Integer id=appInfo.getVersionId();
-        AppVersion appVersion=appVersionService.findAppVersionById(id);
+        AppVersion appVersion=new AppVersion();
+        appVersion.setAppId(appId);
         model.addAttribute("appVersion",appVersion);
         return "developer/appversionadd";
     }
@@ -218,9 +217,9 @@ public class AppInfoController {
         appVersion.setDownloadLink(downloadLink);
         appVersion.setApkLocPath(apkLocPath);
         appVersion.setApkFileName(apkFileName);
-        int ret=appVersionService.addAppVersion(appVersion);
-        if(ret>0){
-            return "developer/appinfolist";
+        boolean flag=appVersionService.addAppVersion(appVersion);
+        if(flag){
+            return "redirect:/dev/flatform/app/list";
         }else {
             return "developer/appversionadd";
         }

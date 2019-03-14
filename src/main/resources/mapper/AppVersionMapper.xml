@@ -21,7 +21,7 @@
 		select * from app_version where id=#{id}
 	</select>
 
-	<insert id="addAppVersion" parameterType="AppVersion">
+	<insert id="addAppVersion" parameterType="AppVersion" useGeneratedKeys="true" keyProperty="id">
 		insert into app_version
 		( appId, versionNo, versionInfo, publishStatus, downloadLink,
 		versionSize, createdBy, creationDate, apkLocPath, apkFileName)

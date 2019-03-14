@@ -9,5 +9,6 @@ public interface AppVersionService {
 
     AppVersion findAppVersionById(Integer id);
 
-    int addAppVersion(AppVersion appVersion);
+    boolean addAppVersion(AppVersion appVersion);
+
 }
