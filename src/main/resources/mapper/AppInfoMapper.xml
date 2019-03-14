@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zzcai.dao.AppInfoMapper">
+	<!-- <resultMap type="AppInfo" id="appInfoList">
+		<id/>
+	</resultMap> -->
+	<select id="findByPage" resultType="AppInfo">
+		select a.id,
+			a.softwareName,
+			a.APKName,
+			a.supportROM,
+			a.softwareSize,
+			a.devId,
+			(select devName from dev_user where id = a.devId) AS devName,
+			a.status,
+			(select valueName from data_dictionary d where  a.status=d.valueId AND d.typeCode='APP_STATUS') AS statusName,
+			a.flatformId,
+			(select valueName from data_dictionary d where  a.flatformId=d.valueId AND d.typeCode='APP_FLATFORM') AS flatformName,
+			a.categoryLevel1,
+			(select categoryName from app_category c where  c.id=a.categoryLevel1) AS categoryLevel1Name,
+			a.categoryLevel2,
+			(select categoryName from app_category c where  c.id=a.categoryLevel2) AS categoryLevel2Name,
+			a.categoryLevel3,
+			(select categoryName from app_category c where  c.id=a.categoryLevel3) AS categoryLevel3Name,
+			a.downloads,
+			a.onSaleDate,
+			a.versionId,
+			(select v.versionNo from app_version v where v.id=a.versionId ) AS versionNo
+		from  app_info a
+		<where>
+			<if test="softwareName !=null">
+				and a.softwareName like CONCAT('%',#{softwareName},'%')
+			</if>
+			<if test="status !=null">
+				and a.status = #{status}
+			</if>
+			<if test="flatformId !=null">
+				and a.flatformId = #{flatformId}
+			</if>
+			<if test="categoryLevel1 !=null">
+				and a.categoryLevel1 = #{categoryLevel1}
+			</if>
+			<if test="categoryLevel2 !=null">
+				and a.categoryLevel2 = #{categoryLevel2}
+			</if>
+			<if test="categoryLevel3 !=null">
+				and a.categoryLevel3 = #{categoryLevel3}
+			</if>
+			<if test="devId !=null">
+				and a.devId = #{devId}
+			</if>
+		</where>
+		order by a.creationDate DESC
+		limit #{from},#{pageSize}
+		
+	</select>
+	
+	<select id="getTotalCount" resultType="Int">
+		select Count(id)
+		from  app_info
+		<where>
+			<if test="softwareName !=null">
+				and softwareName like CONCAT('%',#{softwareName},'%')
+			</if>
+			<if test="status !=null">
+				and status = #{status}
+			</if>
+			<if test="flatformId !=null">
+				and flatformId = #{flatformId}
+			</if>
+			<if test="categoryLevel1 !=null">
+				and categoryLevel1 = #{categoryLevel1}
+			</if>
+			<if test="categoryLevel2 !=null">
+				and categoryLevel2 = #{categoryLevel2}
+			</if>
+			<if test="categoryLevel3 !=null">
+				and categoryLevel3 = #{categoryLevel3}
+			</if>
+            <if test="devId !=null">
+                and devId = #{devId}
+            </if>
+		</where>
+	</select>
+
+	<select id="findAppinfo" resultType="AppInfo">
+        select a.id,
+        a.softwareName,
+        a.APKName,
+        supportROM,
+        a.interfaceLanguage,
+        a.softwareSize,
+        a.downloads,
+        (select valueName from data_dictionary d where  a.flatformId=d.valueId AND d.typeCode='APP_FLATFORM') AS flatformName,
+        (select categoryName from app_category c where  c.id=a.categoryLevel1) AS categoryLevel1Name,
+        (select categoryName from app_category c where  c.id=a.categoryLevel2) AS categoryLevel2Name,
+        (select categoryName from app_category c where  c.id=a.categoryLevel3) AS categoryLevel3Name,
+        (select valueName from data_dictionary d where  a.status=d.valueId AND d.typeCode='APP_STATUS') AS statusName,
+        a.appinfo,
+        a.versionId
+        from  app_info a
+		<where>
+			<if test="id !=null">
+				And id=#{id}
+			</if>
+			<if test="APKName !=null">
+				And APKName=#{APKName}
+			</if>
+		</where>
+	</select>
+
+	<insert id="addAppInfo">
+		insert into appinfodb.app_info
+		(id, softwareName, APKName, supportROM, interfaceLanguage,
+		softwareSize, updateDate, devId, appInfo, `status`, onSaleDate,
+		offSaleDate,flatformId,categoryLevel1, downloads,createdBy,
+		creationDate, categoryLevel2, categoryLevel3, logoPicPath,
+		logoLocPath, versionId)
+		values
+		(#{id},#{softwareName},#{APKName},#{supportROM},#{interfaceLanguage},
+		#{softwareSize},#{updateDate},#{devId},#{appInfo},#{status},#{onSaleDate},
+		#{offSaleDate},#{flatformId},#{categoryLevel1},#{downloads},#{createdBy},
+		#{creationDate},#{categoryLevel2},#{categoryLevel3},#{logoPicPath},
+		#{logoLocPath},#{versionId})
+	</insert>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zzcai.dao.BackendUserMapper">
+	<!-- <resultMap type="BackendUser" id="backendUserList">
+	</resultMap> -->
+	<select id="findByUserCode" resultType="BackendUser">
+		SELECT 	B.id, userCode, userName, userType, B.createdBy, 
+		B.creationDate, B.modifyBy, B.modifyDate, userPassword,
+		D.valueName AS userTypeName
+		FROM backend_user B INNER JOIN data_dictionary D
+		ON B.userType=D.id
+		WHERE userCode=#{userCode}
+	</select>
+	
+</mapper>
